@@ -1,5 +1,5 @@
 jdk:
-  - oraclejdk9
+  - openjdk8
 # would just use default install/script but the ./mvnw script errors on travis
 # obviously this only works for maven builds right now...
 install:

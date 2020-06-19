@@ -21,8 +21,11 @@ For run with docker, execute:
     $ docker-compose up
 ```
 WEB was running on port 82:
+
 > http://localhost:82/
+
 API wan running on port 8900:
+
 > http://localhost:8900/api/
 
 ## CSV files

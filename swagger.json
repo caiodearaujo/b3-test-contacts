@@ -1,0 +1,335 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Contacts API",
+    "description" : "This is a simple API",
+    "contact" : {
+      "email" : "caiofaar@gmail.com"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/caiodearaujo/ContactsAPI/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "http://localhost:8900/api",
+    "description" : "Localhost"
+  } ],
+  "tags" : [ {
+    "name" : "User",
+    "description" : "User (contact) of the system"
+  } ],
+  "paths" : {
+    "/user" : {
+      "get" : {
+        "tags" : [ "User" ],
+        "summary" : "list all users pageable",
+        "description" : "List all users fom API pageable usign SpringBoot papgeable.\n",
+        "operationId" : "listUsers",
+        "responses" : {
+          "200" : {
+            "description" : "All users added will be list",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "User" ],
+        "summary" : "add an user",
+        "description" : "Adds an user to the system",
+        "operationId" : "addUser",
+        "requestBody" : {
+          "description" : "User to add",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "user created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "invalid input, object invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/email/{email}" : {
+      "get" : {
+        "tags" : [ "User" ],
+        "summary" : "list users by email parameter",
+        "description" : "List all users from API as simple list that contains email like the parameter",
+        "operationId" : "findByEmail",
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "path",
+          "description" : "Email address to consulting",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "person@email.com"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "All users founded tah contains email like parameter",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "When no one user was found with these parameter",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/id/{userId}" : {
+      "get" : {
+        "tags" : [ "User" ],
+        "summary" : "find one User by userId parameter",
+        "description" : "List only one user that id is exact like parameter",
+        "operationId" : "findById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID user to consulting",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "number"
+          },
+          "example" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User founded by ID parameter",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ErrorResponse" : {
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string",
+            "example" : "Occurred an internal error in the server."
+          }
+        },
+        "description" : "When some request failed, so this is the object will be returns containing a error message\n"
+      },
+      "Page" : {
+        "type" : "object",
+        "properties" : {
+          "content" : {
+            "type" : "array",
+            "description" : "List of the results from request",
+            "items" : {
+              "$ref" : "#/components/schemas/User"
+            }
+          },
+          "pageable" : {
+            "$ref" : "#/components/schemas/Page_pageable"
+          },
+          "last" : {
+            "type" : "boolean",
+            "description" : "whether the current result is the last one page.",
+            "example" : false
+          },
+          "totalPages" : {
+            "type" : "number",
+            "example" : 10
+          },
+          "totalElements" : {
+            "type" : "number",
+            "example" : 3000
+          },
+          "numberOfElements" : {
+            "type" : "number",
+            "description" : "the number of elements currently on this result",
+            "example" : 50
+          },
+          "first" : {
+            "type" : "boolean",
+            "description" : "whether the current result is the first one page.",
+            "example" : true
+          },
+          "size" : {
+            "type" : "number",
+            "description" : "the size of the presult",
+            "example" : 50
+          },
+          "number" : {
+            "type" : "number",
+            "description" : "number of the current result",
+            "example" : 0
+          },
+          "empty" : {
+            "type" : "boolean",
+            "description" : "whether the current result is empty",
+            "example" : false
+          }
+        },
+        "description" : "A page is a sublist of a list of objects. It allows gain information about the position of it in the containing entire list.\n"
+      },
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "number",
+            "description" : "User ID management by Database (Auto increment)",
+            "example" : 1
+          },
+          "companyId" : {
+            "type" : "number",
+            "example" : 1
+          },
+          "email" : {
+            "type" : "string",
+            "example" : "user@email.com"
+          },
+          "birthdate" : {
+            "type" : "date",
+            "example" : "01/10/1980"
+          }
+        },
+        "description" : "Object that will returns form requests of the API"
+      },
+      "UserPayload" : {
+        "type" : "object",
+        "properties" : {
+          "companyId" : {
+            "type" : "number",
+            "description" : "Only values (1,2,5,7,10) are will accepted.",
+            "example" : 1
+          },
+          "email" : {
+            "type" : "string",
+            "example" : "user@email.com"
+          },
+          "birthdate" : {
+            "type" : "date",
+            "example" : "01/10/1980"
+          }
+        },
+        "description" : "Object pageable that will be used to add new contact (user)."
+      },
+      "Page_pageable" : {
+        "type" : "object",
+        "properties" : {
+          "pageNumber" : {
+            "type" : "number",
+            "description" : "the page to be returned.",
+            "example" : 0
+          },
+          "pageSize" : {
+            "type" : "number",
+            "description" : "the number of items to be returned.",
+            "example" : 10
+          },
+          "unpaged" : {
+            "type" : "boolean",
+            "description" : "whether the current result does not contain pagination information.",
+            "example" : false
+          },
+          "paged" : {
+            "type" : "boolean",
+            "description" : "whether the current result contains pagination information",
+            "example" : true
+          }
+        },
+        "description" : "pagination information"
+      }
+    }
+  }
+}

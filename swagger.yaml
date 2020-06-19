@@ -1,0 +1,234 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/caiodearaujo/ContactsAPI/1.0.0
+  - description: Localhost
+    url: http://localhost:8900/api
+info:
+  description: This is a simple API
+  version: "1.0.0"
+  title: Contacts API
+  contact:
+    email: caiofaar@gmail.com
+tags:
+  - name: User
+    description: User (contact) of the system
+paths:
+  /user:
+    post:
+      tags:
+        - User
+      summary: add an user
+      operationId: addUser
+      description: Adds an user to the system
+      responses:
+        '201':
+          description: user created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: User to add
+    get:
+      tags:
+        - User
+      summary: list all users pageable
+      operationId: listUsers
+      description: |
+        List all users fom API pageable usign SpringBoot papgeable.
+      responses:
+        '200':
+          description: All users added will be list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /user/email/{email}:
+    get:
+      tags:
+        - User
+      summary: list users by email parameter
+      operationId: findByEmail
+      parameters:
+        - in: path
+          name: email
+          example: person@email.com
+          required: true
+          schema:
+            type: string
+          description: Email address to consulting
+      description: List all users from API as simple list that contains email like the parameter
+      responses:
+        '200':
+          description: All users founded tah contains email like parameter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: When no one user was found with these parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /user/id/{userId}:
+    get:
+      tags:
+        - User
+      summary: find one User by userId parameter
+      operationId: findById
+      parameters:
+        - in: path
+          name: id
+          example: 1
+          required: true
+          schema:
+            type: number
+          description: ID user to consulting
+      description: List only one user that id is exact like parameter
+      responses:
+        '200':
+          description: User founded by ID parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      description: |
+        When some request failed, so this is the object will be returns containing a error message
+      properties:
+        message:
+          type: string
+          example: Occurred an internal error in the server.
+    Page:
+      type: object
+      description: |
+        A page is a sublist of a list of objects. It allows gain information about the position of it in the containing entire list.
+      properties:
+        content:
+          type: array
+          description: List of the results from request
+          items:
+            $ref: '#/components/schemas/User'
+        pageable:
+          type: object
+          description: pagination information
+          properties:
+            pageNumber:
+              type: number
+              example: 0
+              description: the page to be returned.
+            pageSize:
+              type: number
+              example: 10
+              description: the number of items to be returned.
+            unpaged:
+              type: boolean
+              example: false
+              description: whether the current result does not contain pagination information.
+            paged:
+              type: boolean
+              example: true
+              description: whether the current result contains pagination information
+        last:
+          type: boolean
+          example: false
+          description: whether the current result is the last one page.
+        totalPages:
+          type: number
+          example: 10
+        totalElements:
+          type: number
+          example: 3000
+        numberOfElements:
+          type: number
+          example: 50
+          description: the number of elements currently on this result
+        first:
+          type: boolean
+          example: true
+          description: whether the current result is the first one page.
+        size:
+          type: number
+          example: 50
+          description: the size of the presult
+        number:
+          type: number
+          example: 0
+          description: number of the current result
+        empty:
+          type: boolean
+          example: false
+          description: whether the current result is empty
+    User:
+      type: object
+      description: Object that will returns form requests of the API
+      properties:
+        userId:
+          type: number
+          description: User ID management by Database (Auto increment)
+          example: 1
+        companyId:
+          type: number
+          example: 1
+        email:
+          type: string
+          example: user@email.com
+        birthdate:
+          type: date
+          example: '01/10/1980'
+    UserPayload:
+      type: object
+      description: Object pageable that will be used to add new contact (user).
+      properties:
+        companyId:
+          type: number
+          description: Only values (1,2,5,7,10) are will accepted.
+          example: 1
+        email:
+          type: string
+          example: user@email.com
+        birthdate:
+          type: date
+          example: '01/10/1980'

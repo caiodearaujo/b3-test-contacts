@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  contacts-api:
+    build: contacts-api/.
+    ports:
+      - "8900:8080"
+    volumes:
+      - ./app/files/:/app/files/
+  contacts-web:
+    build: contacts-web/.
+    ports:
+      - "82:80"
+    depends_on:
+      - contacts-api

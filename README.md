@@ -1,6 +1,6 @@
 # B3 Test - Contacts
-[![Build Status](https://travis-ci.org/caiodearaujo/b3-test-contacts.svg?branch=master)](https://travis-ci.org/caiodearaujo/b3-test-contacts)
 [![](https://validator.swagger.io/validator?url=https://raw.githubusercontent.com/caiodearaujo/b3-test-contacts/master/swagger.json)](https://app.swaggerhub.com/apis/caiodearaujo/ContactsAPI/1.0.0)
+[![Build Status](https://travis-ci.org/caiodearaujo/b3-test-contacts.svg?branch=master)](https://travis-ci.org/caiodearaujo/b3-test-contacts)
 
 Angular WEB project and Java Spring Boot API project
 

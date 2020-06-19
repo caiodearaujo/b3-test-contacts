@@ -1,69 +1,31 @@
 {
   "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/caiodearaujo/ContactsAPI/1.0.0"
+  }, {
+    "description" : "Localhost",
+    "url" : "http://localhost:8900/api"
+  } ],
   "info" : {
-    "title" : "Contacts API",
     "description" : "This is a simple API",
+    "version" : "1.0.0",
+    "title" : "Contacts API",
     "contact" : {
       "email" : "caiofaar@gmail.com"
-    },
-    "version" : "1.0.0"
+    }
   },
-  "servers" : [ {
-    "url" : "https://virtserver.swaggerhub.com/caiodearaujo/ContactsAPI/1.0.0",
-    "description" : "SwaggerHub API Auto Mocking"
-  }, {
-    "url" : "http://localhost:8900/api",
-    "description" : "Localhost"
-  } ],
   "tags" : [ {
     "name" : "User",
     "description" : "User (contact) of the system"
   } ],
   "paths" : {
     "/user" : {
-      "get" : {
-        "tags" : [ "User" ],
-        "summary" : "list all users pageable",
-        "description" : "List all users fom API pageable usign SpringBoot papgeable.\n",
-        "operationId" : "listUsers",
-        "responses" : {
-          "200" : {
-            "description" : "All users added will be list",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Page"
-                }
-              }
-            }
-          },
-          "500" : {
-            "description" : "Internal Server Error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
       "post" : {
         "tags" : [ "User" ],
         "summary" : "add an user",
-        "description" : "Adds an user to the system",
         "operationId" : "addUser",
-        "requestBody" : {
-          "description" : "User to add",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/User"
-              }
-            }
-          }
-        },
+        "description" : "Adds an user to the system",
         "responses" : {
           "201" : {
             "description" : "user created",
@@ -95,6 +57,44 @@
               }
             }
           }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          },
+          "description" : "User to add"
+        }
+      },
+      "get" : {
+        "tags" : [ "User" ],
+        "summary" : "list all users pageable",
+        "operationId" : "listUsers",
+        "description" : "List all users fom API pageable usign SpringBoot papgeable.\n",
+        "responses" : {
+          "200" : {
+            "description" : "All users added will be list",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -102,20 +102,18 @@
       "get" : {
         "tags" : [ "User" ],
         "summary" : "list users by email parameter",
-        "description" : "List all users from API as simple list that contains email like the parameter",
         "operationId" : "findByEmail",
         "parameters" : [ {
-          "name" : "email",
           "in" : "path",
-          "description" : "Email address to consulting",
+          "name" : "email",
+          "example" : "person@email.com",
           "required" : true,
-          "style" : "simple",
-          "explode" : false,
           "schema" : {
             "type" : "string"
           },
-          "example" : "person@email.com"
+          "description" : "Email address to consulting"
         } ],
+        "description" : "List all users from API as simple list that contains email like the parameter",
         "responses" : {
           "200" : {
             "description" : "All users founded tah contains email like parameter",
@@ -157,20 +155,18 @@
       "get" : {
         "tags" : [ "User" ],
         "summary" : "find one User by userId parameter",
-        "description" : "List only one user that id is exact like parameter",
         "operationId" : "findById",
         "parameters" : [ {
-          "name" : "id",
           "in" : "path",
-          "description" : "ID user to consulting",
+          "name" : "id",
+          "example" : 1,
           "required" : true,
-          "style" : "simple",
-          "explode" : false,
           "schema" : {
             "type" : "number"
           },
-          "example" : 1
+          "description" : "ID user to consulting"
         } ],
+        "description" : "List only one user that id is exact like parameter",
         "responses" : {
           "200" : {
             "description" : "User founded by ID parameter",
@@ -200,16 +196,17 @@
     "schemas" : {
       "ErrorResponse" : {
         "type" : "object",
+        "description" : "When some request failed, so this is the object will be returns containing a error message\n",
         "properties" : {
           "message" : {
             "type" : "string",
             "example" : "Occurred an internal error in the server."
           }
-        },
-        "description" : "When some request failed, so this is the object will be returns containing a error message\n"
+        }
       },
       "Page" : {
         "type" : "object",
+        "description" : "A page is a sublist of a list of objects. It allows gain information about the position of it in the containing entire list.\n",
         "properties" : {
           "content" : {
             "type" : "array",
@@ -219,12 +216,35 @@
             }
           },
           "pageable" : {
-            "$ref" : "#/components/schemas/Page_pageable"
+            "type" : "object",
+            "description" : "pagination information",
+            "properties" : {
+              "pageNumber" : {
+                "type" : "number",
+                "example" : 0,
+                "description" : "the page to be returned."
+              },
+              "pageSize" : {
+                "type" : "number",
+                "example" : 10,
+                "description" : "the number of items to be returned."
+              },
+              "unpaged" : {
+                "type" : "boolean",
+                "example" : false,
+                "description" : "whether the current result does not contain pagination information."
+              },
+              "paged" : {
+                "type" : "boolean",
+                "example" : true,
+                "description" : "whether the current result contains pagination information"
+              }
+            }
           },
           "last" : {
             "type" : "boolean",
-            "description" : "whether the current result is the last one page.",
-            "example" : false
+            "example" : false,
+            "description" : "whether the current result is the last one page."
           },
           "totalPages" : {
             "type" : "number",
@@ -236,34 +256,34 @@
           },
           "numberOfElements" : {
             "type" : "number",
-            "description" : "the number of elements currently on this result",
-            "example" : 50
+            "example" : 50,
+            "description" : "the number of elements currently on this result"
           },
           "first" : {
             "type" : "boolean",
-            "description" : "whether the current result is the first one page.",
-            "example" : true
+            "example" : true,
+            "description" : "whether the current result is the first one page."
           },
           "size" : {
             "type" : "number",
-            "description" : "the size of the presult",
-            "example" : 50
+            "example" : 50,
+            "description" : "the size of the presult"
           },
           "number" : {
             "type" : "number",
-            "description" : "number of the current result",
-            "example" : 0
+            "example" : 0,
+            "description" : "number of the current result"
           },
           "empty" : {
             "type" : "boolean",
-            "description" : "whether the current result is empty",
-            "example" : false
+            "example" : false,
+            "description" : "whether the current result is empty"
           }
-        },
-        "description" : "A page is a sublist of a list of objects. It allows gain information about the position of it in the containing entire list.\n"
+        }
       },
       "User" : {
         "type" : "object",
+        "description" : "Object that will returns form requests of the API",
         "properties" : {
           "userId" : {
             "type" : "number",
@@ -282,11 +302,11 @@
             "type" : "date",
             "example" : "01/10/1980"
           }
-        },
-        "description" : "Object that will returns form requests of the API"
+        }
       },
       "UserPayload" : {
         "type" : "object",
+        "description" : "Object pageable that will be used to add new contact (user).",
         "properties" : {
           "companyId" : {
             "type" : "number",
@@ -301,34 +321,7 @@
             "type" : "date",
             "example" : "01/10/1980"
           }
-        },
-        "description" : "Object pageable that will be used to add new contact (user)."
-      },
-      "Page_pageable" : {
-        "type" : "object",
-        "properties" : {
-          "pageNumber" : {
-            "type" : "number",
-            "description" : "the page to be returned.",
-            "example" : 0
-          },
-          "pageSize" : {
-            "type" : "number",
-            "description" : "the number of items to be returned.",
-            "example" : 10
-          },
-          "unpaged" : {
-            "type" : "boolean",
-            "description" : "whether the current result does not contain pagination information.",
-            "example" : false
-          },
-          "paged" : {
-            "type" : "boolean",
-            "description" : "whether the current result contains pagination information",
-            "example" : true
-          }
-        },
-        "description" : "pagination information"
+        }
       }
     }
   }

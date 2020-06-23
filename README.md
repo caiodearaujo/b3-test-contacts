@@ -1,5 +1,5 @@
 # B3 Test - Contacts
-![Build Status](https://travis-ci.org/caiodearaujo/b3-test-contacts.svg?branch=master)
+[![Build Status](https://travis-ci.org/caiodearaujo/b3-test-contacts.svg?branch=master)](https://travis-ci.org/caiodearaujo/b3-test-contacts)
 
 Angular WEB project and Java Spring Boot API project
 
